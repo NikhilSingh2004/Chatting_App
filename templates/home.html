@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="m-5">
+  <form method="post">
+    <h1 class="display-3 mb-3 fw-normal">Enter Details</h1>
+    <div class="form-floating pb-3">
+      <input type="text" class="form-control" id="name" name="name" value="{{name}}"> 
+      <label for="name">Name</label>
+    </div>
+    <div class="form-floating pb-3">
+      <input type="text" class="form-control" id="room" name="room" value="{{room}}">
+      <label for="room">Room Code</label>
+    </div>
+    <div class="container text-center">
+    <div class="row m-2">
+      <div class="col">
+        <button class="btn btn-primary w-100 py-2" type="submit" name="join" value="{{join}}">Join Room</button>
+      </div>
+      <div class="col">
+        <button class="btn btn-primary w-100 py-2" type="submit" name="create" value="{{create}}">Create Room</button>
+      </div>
+    </div>
+  </form>
+  <div>
+{% endblock content %}

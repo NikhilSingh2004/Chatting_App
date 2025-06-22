@@ -1,0 +1,92 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="container my-5">
+
+  <div class="row justify-content-center">
+    <div class="col-md-12 col-lg-10 col-xl-12">
+      <div class="card shadow border-0 rounded-2">
+
+        <!-- Header -->
+        <div class="card-header bg-primary text-white d-flex justify-content-between rounded-top-4 p-3">
+          <h1 class="text-center display-6">Room ID: <strong>{{ room }}</strong> | Name: <strong>{{ name }}</strong></h1>
+        </div>
+
+        <!-- Scrollable Chat Body -->
+        <div class="card-body px-4 py-3" style="height: 450px; overflow-y: auto; background-color: #f8f9fa;">
+          <!-- Messages -->
+          <div class="container" id="messagess">
+          </div>
+        </div>
+
+        <!-- Chat Input Footer -->
+        <div class="card-footer bg-white d-flex align-items-center p-3 border-top">
+          <form id="chatForm" class="d-flex w-100">
+            <input type="text" class="form-control me-2" placeholder="Type message" id="messageInput" autocomplete="off">
+            <button type="submit" class="btn btn-primary">Send</button>
+          </form>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock content %}
+
+
+{% block scripts %}
+<script
+      src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"
+      integrity="sha512-q/dWJ3kcmjBLU4Qc47E4A9kTB4m3wuTY7vkFJDTZKjTs8jhyGQnaUrxa0Ytd0ssMZhbNua9hE+E7Qv1j+DyZwA=="
+      crossorigin="anonymous"
+></script>
+
+<script>
+  const message = document.getElementById("messagess");
+  const insertMessageInChat = (name, messageText, time) => {
+    const content = `
+      <div class="text">
+        <p class="text-start p-0 m-0"><b>${name}</b> : ${messageText}<br><span><small>${time}</small></span></p>
+      </div>
+    `;
+    message.innerHTML += content;
+  };
+
+  var socket = io();
+  socket.on('connect', function () {
+  });
+
+  socket.on('message', (data) => {
+    console.log(data)
+    insertMessageInChat(data.name, data.message, data.time);
+  });
+
+  const chatForm = document.getElementById("chatForm");
+  const messageInput = document.getElementById("messageInput");
+
+  chatForm.addEventListener("submit", function (e) {
+    e.preventDefault();
+    const messageText = messageInput.value.trim();
+
+    if (messageText !== "") {
+      socket.emit("message", {
+        name: "{{ name }}",
+        message: messageText
+      });
+
+      messageInput.value = "";
+    }
+  });
+</script>
+
+{% if messages %}
+{% for msg  in messages %}
+<script type="text/javascript">
+  insertMessageInChat("{{msg.name}}", "{{msg.message}}", "{{msg.time}}")
+</script>
+{% endfor %}
+{% endif %}
+
+{% endblock scripts %}
