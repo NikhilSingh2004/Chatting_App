@@ -147,4 +147,5 @@ def message(data):
     return render_template("home.html", error="Something Went Wrong (4)")
     
 if __name__ == "__main__":
-  socket.run(app)
+  port = int(os.environ.get("PORT", 5000))
+  socket.run(app, host='0.0.0.0', port=port)
