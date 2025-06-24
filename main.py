@@ -147,4 +147,4 @@ def message(data):
     return render_template("home.html", error="Something Went Wrong (4)")
     
 if __name__ == "__main__":
-  socket.run(app, debug=True)
+  socket.run(app)
